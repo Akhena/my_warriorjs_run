@@ -9,9 +9,9 @@ class Player {
   }
 
   playTurn(warrior) {
-    if (this.turnNumber == 0) {
+    /*if (this.turnNumber == 0) {
       warrior.walk("backward");
-    } else if (this.isTakingDamage && this.isLiveCritical(warrior)) {
+    } else */if (this.isTakingDamage && this.isLiveCritical(warrior)) {
       /* prioritize retreat when health critical */
       this.retreat(warrior);
     } else if (this.isTakingDamage && (this.getHostileAround(warrior) != undefined 
@@ -24,8 +24,9 @@ class Player {
     } else if (this.getHostileAround(warrior) != undefined) {
       /* if an enemy stands next to warrior, he will atack it */
       warrior.attack(this.getHostileAround(warrior));
-    } else if (this.isEnemyInSight(warrior)) {
-      /* otherwise we try to range attack */
+    } else if (this.isEnemyInSight(warrior)
+      && !this.isTakingDamage(warrior)) {
+      /* otherwise we try to range attack ONLY if not being attacked*/
       warrior.shoot();
     } else if (this.needsRest(warrior) 
       && !this.isTakingDamage(warrior)
@@ -44,7 +45,10 @@ class Player {
 
   moveInBestDirection(warrior) {
     /*if (this.isTakingDamage(warrior)) warrior.walk("backward");
-    else */warrior.walk();
+    else */
+    if (warrior.feel().isWall()) {
+      warrior.pivot();
+    } else warrior.walk();
   }
 
   needsRest(warrior) {
