@@ -37,6 +37,9 @@ class Player {
     } else if (this.getCaptiveAround(warrior) != undefined) {
       /* if a captive is around, warrior will rescue him */
       warrior.rescue(this.getCaptiveAround(warrior));
+    } else if (this.isCaptiveInSightBehind(warrior)) {
+      /* if a captive is behind, move in his direction */
+      warrior.pivot();
     } else this.moveInBestDirection(warrior);
 
     this.lastTurnHealth = warrior.health();
@@ -80,6 +83,11 @@ class Player {
   isEnemyInSight(warrior) {
     const unit = warrior.look().find(space => !space.isEmpty());
     return unit && unit.isEnemy();
+  }
+
+  isCaptiveInSightBehind(warrior) {
+    const unit = warrior.look("backward").find(space => !space.isEmpty());
+    return unit && unit.isCaptive();
   }
 
   isTakingDamage(warrior) {
