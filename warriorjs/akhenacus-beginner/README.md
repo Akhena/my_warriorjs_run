@@ -1,35 +1,37 @@
-## Akhenacus - beginner - level 7
+## Akhenacus - beginner - level 8
 
-### _You feel a wall right in front of you and an opening behind you._
+### _You hear the mumbling of wizards. Beware of their deadly wands! Good thing you found a bow._
 
-> **TIP:** You're not as effective at attacking backward. Use `warrior.feel().isWall()` and `warrior.pivot()` to turn around.
+> **TIP:** Use `warrior.look()` to determine your surroundings, and `warrior.shoot()` to fire an arrow.
 
 
 ### Floor Map
 
 ```
 ╔══════╗
-║>a S @║
+║@ Cww>║
 ╚══════╝
 
-> = stairs
-a = Archer (7 HP)
-S = Thick Sludge (24 HP)
 @ = Akhenacus (20 HP)
+C = Captive (1 HP)
+w = Wizard (3 HP)
+> = stairs
 ```
 
 ### Abilities
 
 #### Actions (only one per turn)
 
-* `warrior.pivot()`: Rotate in the given direction (backward by default).
+* `warrior.shoot()`: Shoot your bow & arrow in the given direction (forward by default) dealing 3 HP of damage to the first unit in a range of 3 spaces.
 * `warrior.walk()`: Move one space in the given direction (forward by default).
 * `warrior.attack()`: Attack a unit in the given direction (forward by default) dealing 5 HP of damage.
 * `warrior.rest()`: Gain 10% of max health back, but do nothing more.
 * `warrior.rescue()`: Rescue a captive from his chains (earning 20 points) in the given direction (forward by default).
+* `warrior.pivot()`: Rotate in the given direction (backward by default).
 
 #### Senses
 
+* `warrior.look()`: Returns an array of up to 3 spaces in the given direction (forward by default).
 * `warrior.feel()`: Return the adjacent space in the given direction (forward by default).
 * `warrior.health()`: Return an integer representing your health.
 

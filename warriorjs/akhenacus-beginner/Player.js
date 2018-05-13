@@ -3,7 +3,7 @@ class Player {
     this.MAX_HEALTH = 20;
     this.HEALING_THREASHOLD = 0.5;  //warrior needs to rest when HP belown 80%
 
-    this.lastTurnHealth = 20;
+    this.lastTurnHealth = this.MAX_HEALTH;
     this.allDirections = ["forward", "backward", "left", "right"];
     this.turnNumber = 0;
   }
@@ -22,10 +22,19 @@ class Player {
       /* once warrior starts healing, he will heal until full health */
       warrior.rest();
     } else if (this.getHostileAround(warrior) != undefined) {
+      /* if an enemy stands next to warrior, he will atack it */
       warrior.attack(this.getHostileAround(warrior));
-    } else if (this.needsRest(warrior) && !this.isTakingDamage(warrior)) {
+    } else if (this.isEnemyInSight(warrior)) {
+      /* otherwise we try to range attack */
+      warrior.shoot();
+    } else if (this.needsRest(warrior) 
+      && !this.isTakingDamage(warrior)
+      && !this.isEnemyInSight(warrior)) {
+      /* if not taking damage and health below threshold and not enemy in danger reach,
+       warrior will heal */
       warrior.rest();
     } else if (this.getCaptiveAround(warrior) != undefined) {
+      /* if a captive is around, warrior will rescue him */
       warrior.rescue(this.getCaptiveAround(warrior));
     } else this.moveInBestDirection(warrior);
 
@@ -62,6 +71,11 @@ class Player {
       return true;
     }
     return false;
+  }
+
+  isEnemyInSight(warrior) {
+    const unit = warrior.look().find(space => !space.isEmpty());
+    return unit && unit.isEnemy();
   }
 
   isTakingDamage(warrior) {
