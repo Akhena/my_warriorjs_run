@@ -12,7 +12,12 @@ class Player {
     if (this.turnNumber == 0) {
       warrior.walk("backward");
     } else if (this.isTakingDamage && this.isLiveCritical(warrior)) {
+      /* prioritize retreat when health critical */
       this.retreat(warrior);
+    } else if (this.isTakingDamage && (this.getHostileAround(warrior) != undefined 
+                                        && this.getHostileAround(warrior) != "forward")) {
+      /* check if we don't need rotating to face the supposed attacking enemy */
+      this.faceEnemy(warrior);
     } else if (this.isHealing(warrior) && warrior.health() < this.MAX_HEALTH) {
       /* once warrior starts healing, he will heal until full health */
       warrior.rest();
@@ -48,6 +53,15 @@ class Player {
         && !warrior.feel(direction).isCaptive())
       });
     return foundDirection;
+  }
+
+  faceEnemy(warrior) {
+    var foundDirection = this.getHostileAround(warrior);
+    if (foundDirection != "forward") {
+      warrior.pivot(foundDirection);
+      return true;
+    }
+    return false;
   }
 
   isTakingDamage(warrior) {
